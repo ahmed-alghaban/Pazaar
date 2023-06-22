@@ -15,26 +15,32 @@
             {% block menu %} {% include 'menu.html' %} {% endblock menu %}
         </nav>
     </header>
-    <main class="merch-card">
-        {%for merch in merchs%}
-        
-        <div>
-        <div class="card" style="width:250px; text-align: center;">
-                <img src="{{ url_for('static', filename='uploads/' + merch.img) }}" alt="{{ merch.img }}">
-                <div class="card-body">
-                <h5 class="card-title">{{merch.title}}</h5>
-                <h6>{{merch.artist.name}}</h6>
-                <h6>{{merch.price}}</h6>
-               {%if session['type'] == "customer"%}
-              <a href="/place_order_in_cart/{{merch.id}}" >Place Order</a>
-              {%endif%}
-            </div>
-          </div>
-        </div>
-        {%endfor%}
+    <main>
+    
+    {%if session['cart'] == true:%}
+   <table class="table col-6 mx-auto my-5">
+    <tr>
+        <th>Title</th>
+        <th>Price</th>
+        <th>Artist</th>
+        <th>Action</th>
+    </tr>
+    {%for order in orders:%}
+    <tr>
+        <td>{{order.merchs.title}}</td>
+        <td>{{order.merchs.price}}</td>
+        <td>{{order.artists.name}}</td>
+        <td>
+        <form action="delete_from_cart/{{order.merchs.id}}" method="POST">
+            <button>delete</button>
+        </form></td>
+    </tr>
+        <a href="/place_order/{{order.artists.id}}">Place Order</a>
+    {%endfor%}
+      {%endif%}
+    </table> 
     </main>
     <footer>
-
     </footer>
     <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js')}}"></script>
 </body>

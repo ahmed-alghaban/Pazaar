@@ -1,0 +1,17 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+.merch-card{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 20px;
+    margin-top: 10px;
+}
+.navbar{
+    display: flex;
+    margin: 10px;
+    justify-content: space-around;
+}

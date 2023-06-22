@@ -15,27 +15,30 @@
             {% block menu %} {% include 'menu.html' %} {% endblock menu %}
         </nav>
     </header>
-    <main class="merch-card">
+    <Main class="merch-card">
+        {%if merchs%}
         {%for merch in merchs%}
-        
-        <div>
         <div class="card" style="width:250px; text-align: center;">
                 <img src="{{ url_for('static', filename='uploads/' + merch.img) }}" alt="{{ merch.img }}">
                 <div class="card-body">
+                    {%if session['id'] and session['type'] =='artist' : %}   
+                <a href="/edit_merch/form/{{merch.id}}">
+                    <h5 class="card-title">{{merch.title}}</h5>
+                </a>
+                {%else%}
                 <h5 class="card-title">{{merch.title}}</h5>
-                <h6>{{merch.artist.name}}</h6>
-                <h6>{{merch.price}}</h6>
-               {%if session['type'] == "customer"%}
-              <a href="/place_order_in_cart/{{merch.id}}" >Place Order</a>
-              {%endif%}
+                {%endif%}
+                <h6>{{merch.price}}</h5>
+                    <form action="delete_merch/{{merch.id}}" method="post">
+                      <button class="btn btn-danger">delete</button>
+                  </form>
             </div>
           </div>
-        </div>
         {%endfor%}
-    </main>
+        {%endif%}
+    </Main>
     <footer>
 
     </footer>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js')}}"></script>
 </body>
 </html>

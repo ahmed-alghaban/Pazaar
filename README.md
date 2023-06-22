@@ -18,3 +18,4 @@ static/js/scripts.js
 
 
 ## The template folder contains a index.html prefilled with basics of linked css and js as well as the block menu so that you can update the nav links on just the menu.html file
+# Pazaar
