@@ -1,47 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" 
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - Pazaar</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/styles.css') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
     <header>
-        <nav>
-            {% block menu %} {% include 'menu.html' %} {% endblock menu %}
-        </nav>
+      <nav>{% block menu %} {% include 'menu.html' %} {% endblock menu %}</nav>
     </header>
-    <main>
-    
-    {%if session['cart'] == true:%}
-   <table class="table col-6 mx-auto my-5">
-    <tr>
-        <th>Title</th>
-        <th>Price</th>
-        <th>Artist</th>
-        <th>Action</th>
-    </tr>
-    {%for order in orders:%}
-    <tr>
-        <td>{{order.merchs.title}}</td>
-        <td>{{order.merchs.price}}</td>
-        <td>{{order.artists.name}}</td>
-        <td>
-        <form action="delete_from_cart/{{order.merchs.id}}" method="POST">
-            <button>delete</button>
-        </form></td>
-    </tr>
-        <a href="/place_order/{{order.artists.id}}">Place Order</a>
-    {%endfor%}
-      {%endif%}
-    </table> 
+
+    <main class="main-content">
+      <div class="container">
+        <div class="page-header fade-in">
+          <h1><i class="fas fa-shopping-cart"></i> Shopping Cart</h1>
+          <p>Review your items before checkout</p>
+        </div>
+
+        {% if session['cart'] == true %} {% if orders %}
+        <div class="table-container fade-in">
+          <table class="table">
+            <thead>
+              <tr>
+                <th><i class="fas fa-tshirt"></i> Item</th>
+                <th><i class="fas fa-user"></i> Artist</th>
+                <th><i class="fas fa-dollar-sign"></i> Price</th>
+                <th><i class="fas fa-cogs"></i> Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <td>
+                  <div class="item-info">
+                    <strong>{{ order.merchs.title }}</strong>
+                  </div>
+                </td>
+                <td>{{ order.artists.name }}</td>
+                <td class="price">${{ order.merchs.price }}</td>
+                <td>
+                  <div class="action-buttons">
+                    <form
+                      action="delete_from_cart/{{ order.merchs.id }}"
+                      method="POST"
+                      style="display: inline"
+                    >
+                      <button type="submit" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i>
+                        Remove
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <div class="cart-summary">
+            <div class="summary-item">
+              <span>Total Items:</span>
+              <span>{{ orders|length }}</span>
+            </div>
+            <div class="summary-item total">
+              <span>Total Price:</span>
+              <span>${{ orders|sum(attribute='merchs.price') }}</span>
+            </div>
+            <div class="checkout-actions">
+              <a
+                href="/place_order/{{ orders[0].artists.id if orders else '#' }}"
+                class="btn btn-primary"
+              >
+                <i class="fas fa-credit-card"></i>
+                Proceed to Checkout
+              </a>
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <div class="empty-cart fade-in">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>Your cart is empty</h3>
+          <p>Add some merchandise to get started!</p>
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-store"></i>
+            Browse Merchandise
+          </a>
+        </div>
+        {% endif %} {% else %}
+        <div class="empty-cart fade-in">
+          <i class="fas fa-shopping-cart"></i>
+          <h3>No active cart</h3>
+          <p>Start shopping to add items to your cart!</p>
+          <a href="/" class="btn btn-primary">
+            <i class="fas fa-store"></i>
+            Browse Merchandise
+          </a>
+        </div>
+        {% endif %}
+      </div>
     </main>
-    <footer>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2024 Pazaar. All rights reserved.</p>
+      </div>
     </footer>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js')}}"></script>
-</body>
+
+    <script
+      type="text/javascript"
+      src="{{ url_for('static', filename='js/scripts.js') }}"
+    ></script>
+  </body>
 </html>

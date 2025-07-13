@@ -1,3 +1,4 @@
+﻿
 from flask_app import app
 from flask_app.models.merch import Merch
 from flask import redirect,render_template,session,request,flash , url_for
@@ -78,3 +79,5 @@ def edit_merch(id):
         return redirect("/")
     Merch.edit_merch(data)
     return redirect("/")
+
+
